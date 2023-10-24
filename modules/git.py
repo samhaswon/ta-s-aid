@@ -30,7 +30,6 @@ class Git(object):
                 os.system(f"git clone git@{self.git_url}/{student}/{student}-{repo} {destination}/{student}")
                 date = subprocess.Popen(f"cd {destination}/{student} && git log -1 --format=%cd",
                                         stdout=subprocess.PIPE, shell=True).communicate()[0].decode("utf-8")
-                # os.system(f"cd {destination}/{student}; git log -1 --format=%cd")
                 commit_summary.append((student, date))
         else:
             for student, repo in repo_list:
@@ -38,7 +37,6 @@ class Git(object):
                 os.system(f"git clone https://{self.git_url}/{student}/{student}-{repo} {destination}/{student}.git")
                 date = subprocess.Popen(f"cd {destination}/{student} && git log -1 --format=%cd",
                                         stdout=subprocess.PIPE, shell=True).communicate()[0].decode("utf-8")
-                # os.system(f"cd {destination}/{student}; git log -1 --format=%cd")
                 commit_summary += (student, date)
 
         for student, date in commit_summary:
