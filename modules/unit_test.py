@@ -1,8 +1,8 @@
 from modules.good_job import good_job
-from typing import List
-import subprocess
 import os
 import shutil
+import subprocess
+from typing import List
 
 
 class UnitTest(object):

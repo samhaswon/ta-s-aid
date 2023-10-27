@@ -1,7 +1,7 @@
 import os
+import shutil
 import subprocess
 from typing import List, Tuple
-import shutil
 
 
 class Git(object):
