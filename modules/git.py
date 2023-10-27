@@ -8,10 +8,11 @@ class Git(object):
     """
     A simple module to bulk-clone git repos.
     """
-    def __init__(self, git_url: str, use_ssh: bool = True):
+    def __init__(self, git_url: str, use_ssh: bool = True) -> None:
         """
         :param git_url: base URL for the git repos
         :param use_ssh: True = use ssh to clone repos
+        :returns: None
         """
         self.git_url: str = git_url
         self.ssh: bool = use_ssh
