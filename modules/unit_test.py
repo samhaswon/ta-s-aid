@@ -46,15 +46,12 @@ class UnitTest(object):
             pass_count = run_result.count(".")
 
             # Add a summary to the output file
-            summary = good_job() \
-                if not error_count \
-                and not failure_count \
-                else "" + \
-                     f"Errors: {error_count}\n" + \
-                     f"Failures: {failure_count}\n" + \
-                     f"Passed: {pass_count}\n" + \
-                     f"Total: {error_count + failure_count + pass_count}\n" + \
-                     "=" * shutil.get_terminal_size((80, 20)).columns + "\n\n"
+            summary = (good_job() + "\n" if not error_count and not failure_count else "") + \
+                      f"Errors: {error_count}\n" + \
+                      f"Failures: {failure_count}\n" + \
+                      f"Passed: {pass_count}\n" + \
+                      f"Total: {error_count + failure_count + pass_count}\n" + \
+                      "=" * shutil.get_terminal_size((70, 20)).columns + "\n\n"
 
             # Save the run result
             with open(f"{self.__repo_directory}/{student}.txt", "w") as output_file:
