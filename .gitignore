@@ -5,3 +5,4 @@ tests/ids.txt
 *.pyc
 *.zip
 test_potion.py
+submissions/
