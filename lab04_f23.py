@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from datetime import datetime
 from modules.unit_test import UnitTest
 import os
@@ -7,6 +9,9 @@ import shutil
 from zipfile import ZipFile
 
 if __name__ == '__main__':
+    if not os.path.isfile("./test_potion.py"):
+        print("Please place test_potion.py in this directory")
+        exit(1)
     # Find the submission .zip file and extract it
     submission_zip: str = [x for x in os.listdir(os.getcwd()) if x.endswith(".zip")][0]
 
@@ -17,6 +22,46 @@ if __name__ == '__main__':
 
     # Get a list of all the submitted files
     directory_name = os.getcwd() + os.path.sep + "submissions"
+    sub_list = [x[2] for x in os.walk(directory_name)][0]
+
+    for submission in sub_list:
+        if submission.endswith(".zip"):
+            print(f"Zip submission: {submission}")
+            unzip_it = True
+            # Adapted from: https://rules.sonarsource.com/python/RSPEC-5042/
+            THRESHOLD_ENTRIES = 10000
+            THRESHOLD_SIZE = 1000000000
+            THRESHOLD_RATIO = 10
+
+            totalSizeArchive = 0
+            totalEntryArchive = 0
+            zfile = ZipFile(f"./submissions/{submission}")
+            for zinfo in zfile.infolist():
+                data = zfile.read(zinfo)
+
+                totalEntryArchive += 1
+
+                totalSizeArchive += len(data)
+                ratio = len(data) / zinfo.compress_size
+
+                if ratio > THRESHOLD_RATIO:
+                    print("Highly compressed zip file. Could be a zip bomb.")
+                    unzip_it = False
+                    break
+                if totalSizeArchive > THRESHOLD_SIZE:
+                    print("Weirdly large zip file. Not decompressing")
+                    unzip_it = False
+                    break
+                if totalEntryArchive > THRESHOLD_ENTRIES:
+                    print("Too many files. Not decompressing.")
+                    unzip_it = False
+                    break
+            if unzip_it:
+                zfile.extractall(path="./submissions")
+            zfile.close()
+            os.remove(f"./submissions/{submission}")
+
+    # Get the submission list again after extraction
     sub_list = [x[2] for x in os.walk(directory_name)][0]
 
     # Check for multiple submissions, removing all but the latest one
