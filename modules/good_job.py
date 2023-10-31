@@ -25,7 +25,7 @@ def good_job() -> str:
         "Your code works perfectly!",
         "Syntax Error Free!",
         "Exceptionally bug-free code!",
-        "Your code is running smoothly!"
+        "Your code is running smoothly!",
         "Your code is error-free!"
     ]
     return random.choice(congratulations)
