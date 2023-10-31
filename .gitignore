@@ -2,3 +2,4 @@
 test_destination/
 venv/
 tests/ids.txt
+*.pyc
