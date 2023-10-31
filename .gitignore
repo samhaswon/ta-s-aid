@@ -3,3 +3,5 @@ test_destination/
 venv/
 tests/ids.txt
 *.pyc
+*.zip
+test_potion.py
