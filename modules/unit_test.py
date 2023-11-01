@@ -3,7 +3,22 @@ import os
 import random
 import shutil
 import subprocess
+from threading import Thread
 from typing import List
+
+
+class ThreadWRV(Thread):
+    def __init__(self, group=None, target=None, name=None, args=(), kwargs={}, Verbose=None):
+        Thread.__init__(self, group, target, name, args, kwargs)
+        self._return = None
+
+    def run(self):
+        if self._target:
+            self._return = self._target(*self._args, **self._kwargs)
+
+    def join(self, *args):
+        Thread.join(self, *args)
+        return self._return
 
 
 def some_failure_feedback() -> str:
@@ -143,13 +158,15 @@ class UnitTest(object):
         :return: None
         """
         results = []
+        threads = []
         for student in self.__student_list:
             print(f"Running tests for {student}")
-            output = subprocess.Popen(
-                f"cd {self.__repo_directory}/{student}/ && {self.__py_cmd} -m unittest discover {self.__test_dir}",
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate()[1].decode("utf-8")
-            results.append((student, output))
+            threads.append(ThreadWRV(target=self.test_thread, args=[student]))
+            threads[-1].start()
+        for thread in threads:
+            results.append(thread.join())
         for student, output in results:
+            """
             # Get the run summary, counting the errors, failures, and passes
             run_result = output.splitlines()[0]
             error_count = run_result.count("E")
@@ -169,3 +186,32 @@ class UnitTest(object):
             # Save the run result
             with open(f"{self.__repo_directory}/{student}.txt", "w") as output_file:
                 output_file.write(summary + output)
+            """
+            Thread(target=self.results_thread, args=[student, output]).run()
+
+    def test_thread(self, student):
+        output = subprocess.Popen(
+            f"cd {self.__repo_directory}/{student}/ && {self.__py_cmd} -m unittest discover {self.__test_dir}",
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate()[1].decode("utf-8")
+        return student, output
+
+    def results_thread(self, student, output):
+        # Get the run summary, counting the errors, failures, and passes
+        run_result = output.splitlines()[0]
+        error_count = run_result.count("E")
+        failure_count = run_result.count("F")
+        pass_count = run_result.count(".")
+        total = error_count + failure_count + pass_count
+
+        # Add a summary to the output file
+        summary = \
+            self.__feedback(error_count, failure_count, total) + "\n" + \
+            f"Errors: {error_count}\n" + \
+            f"Failures: {failure_count}\n" + \
+            f"Passed: {pass_count}\n" + \
+            f"Total: {total}\n" + \
+            "=" * shutil.get_terminal_size((70, 20)).columns + "\n\n"
+
+        # Save the run result
+        with open(f"{self.__repo_directory}/{student}.txt", "w") as output_file:
+            output_file.write(summary + output)
