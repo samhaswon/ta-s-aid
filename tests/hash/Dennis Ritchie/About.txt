@@ -1,0 +1,16 @@
+Dennis Ritchie (1941 - 2011) was an American computer scientist. He is known for creating the C programming language and co-creating the Unix operating system. 
+
+Biography:
+Born in Bronxville, New York on September 9, 1941
+Died on October 12, 2011 at the age of 70
+Co-winner of the 1983 A.M. Turing Award, the highest honor in computer science
+Retired as head of Lucent Technologies' System Software Research Department in 2007
+
+Contributions:
+Created the C programming language in 1972
+Co-developed the Unix operating system with Ken Thompson
+Co-developed the B programming language with Ken Thompson
+
+Other information:
+Ritchie was known to be a lifelong Christian who kept his faith mostly private.
+Ritchie had a dry sense of humor and a keen appreciation for life's absurdities.
