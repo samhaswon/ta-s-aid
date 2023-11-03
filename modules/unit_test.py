@@ -1,24 +1,11 @@
-from modules.good_job import good_job
+from modules.helpers.good_job import good_job
+from modules.helpers.threadwrv import ThreadWRV
 import os
 import random
 import shutil
 import subprocess
 from threading import Thread
 from typing import List
-
-
-class ThreadWRV(Thread):
-    def __init__(self, group=None, target=None, name=None, args=(), kwargs={}, Verbose=None):
-        Thread.__init__(self, group, target, name, args, kwargs)
-        self._return = None
-
-    def run(self):
-        if self._target:
-            self._return = self._target(*self._args, **self._kwargs)
-
-    def join(self, *args):
-        Thread.join(self, *args)
-        return self._return
 
 
 def some_failure_feedback() -> str:
