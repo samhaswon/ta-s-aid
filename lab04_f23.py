@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 from datetime import datetime
+from modules.import_check import ImportCheck
 from modules.unit_test import UnitTest
+from modules.plagiarism import Plagiarism
 import os
 from pathlib import Path
-from modules.plagiarism import Plagiarism
 import re
 import shutil
 from zipfile import ZipFile
@@ -117,3 +118,6 @@ if __name__ == '__main__':
     # Run all the unit tests
     tester = UnitTest(student_list, directory_name, "")
     tester.do_tests()
+
+    import_check = ImportCheck("./submissions")
+    import_check.check("potion.py", "random")
