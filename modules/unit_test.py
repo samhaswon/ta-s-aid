@@ -138,7 +138,7 @@ class UnitTest(object):
             self.__py_cmd = "python"
         else:
             self.__py_cmd = "py"
-        print(f"Using python command: {self.__py_cmd}")
+        print(f"[Unittest] Using python command: {self.__py_cmd}")
 
     def __feedback(self, error_count: int, failure_count: int, total: int) -> str:
         if (failure_count + error_count) == total:
@@ -160,7 +160,7 @@ class UnitTest(object):
         results = []
         threads = []
         for student in self.__student_list:
-            print(f"Running tests for {student}")
+            print(f"[Unittest] Running tests for {student}")
             threads.append(ThreadWRV(target=self.test_thread, args=[student]))
             threads[-1].start()
         for thread in threads:

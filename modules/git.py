@@ -27,7 +27,7 @@ class Git(object):
         commit_summary: List[Tuple[str, str]] = []
         if self.ssh:
             for student, repo in repo_list:
-                print(f"Getting {student}'s repo...")
+                print(f"[Git] Getting {student}'s repo...")
                 os.system(f"git clone git@{self.git_url}/{student}/{student}-{repo} {destination}/{student}")
                 date = subprocess.Popen(f"cd {destination}/{student} && git log -1 --format=%cd",
                                         stdout=subprocess.PIPE, shell=True).communicate()[0].decode("utf-8")
@@ -42,6 +42,6 @@ class Git(object):
 
         for student, date in commit_summary:
             print("-" * shutil.get_terminal_size((80, 20)).columns + "\n")
-            print(f"Student: {student}\t\tDate: {date}")
+            print(f"[Git] Student: {student}\t\tDate: {date}")
         print("-" * shutil.get_terminal_size((80, 20)).columns + "\n")
         return commit_summary
