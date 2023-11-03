@@ -19,6 +19,7 @@ class ImportCheck(object):
         the start of the file. Requires there being a file to add to from something like the unit_test module.
         :return: List of files' path without the import
         """
+        # Get all of the folders in the directory
         folders = [x[1] for x in os.walk(self.__check_directory)][0]
         no_import_list = []
         import_regex = re.compile(r"^\s*import\s" + module + r"|^\s*from\s" + module + r"import")
@@ -37,10 +38,17 @@ class ImportCheck(object):
                                 break
                         if not match:
                             if add_to_file:
-                                with open(self.__check_directory + os.path.sep + f"{folder}.txt", "r") as feedback_file:
-                                    feedback = feedback_file.read()
-                                contents = f"You did not import (and therefore did not use) {module}\n" + feedback
-                                with open(self.__check_directory + os.path.sep + f"{folder}.txt", "w") as feedback_file:
-                                    feedback_file.write(contents)
+                                try:
+                                    with open(self.__check_directory + os.path.sep + f"{folder}.txt", "r") as \
+                                            feedback_file:
+                                        feedback = feedback_file.read()
+                                    contents = f"You did not import (and therefore did not use) {module}\n" + feedback
+                                    with open(self.__check_directory + os.path.sep + f"{folder}.txt", "w") as \
+                                            feedback_file:
+                                        feedback_file.write(contents)
+                                except FileNotFoundError:
+                                    raise Exception("Not file to write to. Consider creating an output file for each "
+                                                    "folder or use the output of the function. You may consider using "
+                                                    "the unit test module for this task.")
                             no_import_list.append(path)
         return no_import_list
