@@ -15,7 +15,13 @@ class Plagiarism(object):
         self.__new_hashes = []
         self.__hash_passed_files = []
 
-    def check_hash(self) -> Union[Tuple[Tuple[str, str, str], Tuple[str, str, str]], None]:
+    def check_hash(self) -> Union[List[Tuple[Tuple[str, str, str], Tuple[str, str, str]]], None]:
+        """
+        Checks files, by hash, at the given directory
+        :return: None, if no plagiarism, or list of tuples of 2-tuples of the offenders of the format: (file, hash,
+        folder)
+        """
+        print("[Plagiarism] Checking file hashes")
         top_level_folders = [x[1] for x in os.walk(self.__check_directory)][0]
         hashlist = []
         for folder in top_level_folders:
@@ -40,6 +46,26 @@ class Plagiarism(object):
                 self.__new_hashes.append(hashlist[i][1])
                 self.__hash_passed_files.append(hashlist[i])
         return results if len(results) else None
+
+    def check_hash_str(self) -> str:
+        """
+        (String version of check_hash) Checks files, by hash, at the given directory
+        :return: Fancier output of check_hash as a string with instances separated by "=" bars and "-" separating files.
+        Returns an empty string for no plagiarism.
+        """
+        results = self.check_hash()
+        if results:
+            results_string = "=" * 70 + "\n"
+            for result in results:
+                results_string += f"[Plagiarism] File: {result[0][0]}\n"
+                results_string += f"[Plagiarism] Student: {result[0][2]}\n"
+                results_string += "-" * 70 + "\n"
+                results_string += f"[Plagiarism] File: {result[1][0]}\n"
+                results_string += f"[Plagiarism] Student: {result[1][2]}\n"
+                results_string += "=" * 70 + "\n"
+            return results_string
+        else:
+            return ""
 
     def _hash_it(self, rel_folder) -> List[Tuple[str, str, str]]:
         file_list = []
