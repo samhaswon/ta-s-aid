@@ -4,6 +4,7 @@ from datetime import datetime
 from modules.unit_test import UnitTest
 import os
 from pathlib import Path
+from modules.plagiarism import Plagiarism
 import re
 import shutil
 from zipfile import ZipFile
@@ -109,6 +110,9 @@ if __name__ == '__main__':
 
         # Put the test in their folder
         shutil.copy("./test_potion.py", f"./submissions/{student}/test_potion.py")
+
+    plagiarism_check = Plagiarism("./submissions", ["test_potion.py"])
+    print(plagiarism_check.check_hash_str())
 
     # Run all the unit tests
     tester = UnitTest(student_list, directory_name, "")
