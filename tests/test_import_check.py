@@ -12,11 +12,14 @@ class TestImportCheck(TestCase):
         import_check = ImportCheck("imports")
         import_check.check("file.py", "random")
 
-        # Test to see that Jeffs A and B did import random
+        # Test to see that Jeffs A, B, and F did import random
         with open(f"imports{os.path.sep}Jeff A.txt", "r") as jeff_file:
             self.assertNotIn("You did not import (and therefore did not use) random",
                              jeff_file.read())
         with open(f"imports{os.path.sep}Jeff B.txt", "r") as jeff_file:
+            self.assertNotIn("You did not import (and therefore did not use) random",
+                             jeff_file.read())
+        with open(f"imports{os.path.sep}Jeff F.txt", "r") as jeff_file:
             self.assertNotIn("You did not import (and therefore did not use) random",
                              jeff_file.read())
 
