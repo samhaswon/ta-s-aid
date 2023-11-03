@@ -1,4 +1,5 @@
 import os
+import re
 from typing import List
 
 
@@ -20,6 +21,7 @@ class ImportCheck(object):
         """
         folders = [x[1] for x in os.walk(self.__check_directory)][0]
         no_import_list = []
+        import_regex = re.compile(r"^\s*import\s" + module + r"|^\s*from\s" + module + r"import")
 
         for folder in folders:
             for root, directories, files in os.walk(self.__check_directory + os.path.sep + folder):
@@ -27,8 +29,13 @@ class ImportCheck(object):
                     if filename == file:
                         path = os.path.relpath(os.path.join(root, filename))
                         with open(path, "r") as sub_file:
-                            contents = sub_file.read()
-                        if f"import {module}" not in contents and f"from {module} import" not in contents:
+                            contents = sub_file.readlines()
+                        match = False
+                        for line in contents:
+                            if import_regex.match(line):
+                                match = True
+                                break
+                        if not match:
                             if add_to_file:
                                 with open(self.__check_directory + os.path.sep + f"{folder}.txt", "r") as feedback_file:
                                     feedback = feedback_file.read()
