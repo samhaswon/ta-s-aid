@@ -4,7 +4,7 @@ from typing import Union, List, Tuple
 
 
 class Plagiarism(object):
-    def __init__(self, check_directory: str, ignored_files: Union[list, None]):
+    def __init__(self, check_directory: str, ignored_files: Union[List[str], None]) -> None:
         """
         Created a plagiarism object for a given directory
         :param check_directory:
