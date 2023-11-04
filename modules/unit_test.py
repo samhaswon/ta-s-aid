@@ -127,7 +127,8 @@ class UnitTest(object):
             self.__py_cmd = "py"
         print(f"[Unittest] Using python command: {self.__py_cmd}")
 
-    def __feedback(self, error_count: int, failure_count: int, total: int) -> str:
+    @staticmethod
+    def __feedback(error_count: int, failure_count: int, total: int) -> str:
         if (failure_count + error_count) == total:
             return all_failed()
         if error_count and failure_count:
