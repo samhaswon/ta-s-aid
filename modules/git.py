@@ -16,6 +16,9 @@ class Git(object):
         """
         self.git_url: str = git_url
         self.ssh: bool = use_ssh
+        if os.system("git --version"):
+            print("Git is not installed. Exiting...")
+            exit(1)
 
     def clone(self, repo_list: List[Tuple[str, str]], destination: str = "working_dir") -> List[Tuple[str, str]]:
         """
