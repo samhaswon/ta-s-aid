@@ -21,7 +21,7 @@ class ImportCheck(object):
         the start of the file. Requires there being a file to add to from something like the unit_test module.
         :return: List of files' path without the import
         """
-        # Get all of the folders in the directory
+        # Get all the folders in the directory
         folders = [x[1] for x in os.walk(self.__check_directory)][0]
         no_import_list = []
         import_regex = re.compile(r"^\s*import\s" + module + r"|^\s*from\s" + module + r"import")

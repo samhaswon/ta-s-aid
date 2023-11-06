@@ -129,8 +129,8 @@ class UnitTest(object):
     @staticmethod
     def __feedback(error_count: int, failure_count: int, total: int) -> str:
         """
-        Gets an appropriate feedback string
-        :param error_count: number of errors in the unit-test run
+        Gets an appropriate feedback string.
+        :param error_count: Number of errors in the unit-test run
         :param failure_count: number of failures in the unit-test run
         :param total: total number of tests in the unit-test run
         :return: feedback string

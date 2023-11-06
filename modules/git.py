@@ -13,7 +13,7 @@ class Git(object):
     def __init__(self, git_url: str, use_ssh: bool = True) -> None:
         """
         :param git_url: base URL for the git repos
-        :param use_ssh: True = use ssh to clone repos
+        :param use_ssh: True = use ssh to clone the repo
         :returns: None
         """
         self.git_url: str = git_url

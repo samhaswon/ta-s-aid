@@ -15,7 +15,7 @@ class TestImportCheck(TestCase):
         import_check = ImportCheck("imports")
         import_check.check("file.py", "random")
 
-        # Test to see that Jeffs A, B, and F did import random
+        # Test to see that Jeff's A, B, and F did import random
         with open(f"imports{os.path.sep}Jeff A.txt", "r") as jeff_file:
             self.assertNotIn("You did not import (and therefore did not use) random",
                              jeff_file.read())
@@ -26,7 +26,7 @@ class TestImportCheck(TestCase):
             self.assertNotIn("You did not import (and therefore did not use) random",
                              jeff_file.read())
 
-        # Test to see that Jeffs C, D, and E didn't import random
+        # Test to see that Jeff's C, D, and E didn't import random
         with open(f"imports{os.path.sep}Jeff C.txt", "r") as jeff_file:
             self.assertIn("You did not import (and therefore did not use) random",
                           jeff_file.read())
@@ -37,7 +37,7 @@ class TestImportCheck(TestCase):
             self.assertIn("You did not import (and therefore did not use) random",
                           jeff_file.read())
 
-        # Sanity check each output file after the import check
+        # Sanity checks each output file after the import check
         for folder in folders:
             with open(f"imports{os.path.sep + folder}.txt") as jeff_file:
                 self.assertIn("Some output\n", jeff_file.read())
