@@ -99,7 +99,7 @@ class Plagiarism(object):
         return self.__seen_hashes + self.__new_hashes
 
     @seen_hashes.setter
-    def seen_hashes(self, value) -> None:
+    def seen_hashes(self, value: List[str]) -> None:
         """
         Inject old file hashes to compare against
         :param value: list of strings of the hex digest of the sha256 sum of the files

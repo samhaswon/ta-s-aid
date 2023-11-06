@@ -5,9 +5,10 @@ from modules.plagiarism import Plagiarism
 class TestPlagiarism(TestCase):
     def test_do_hash(self):
         plagiarism = Plagiarism('./hash', ['Instructions.txt'])
+        plagiarism.seen_hashes = ["aa9034d059fd0c902176471e7075d250bb87e7466bb7d4abdb2fa52e3dfaf959"]
         results = plagiarism.check_hash()
 
-        self.assertEqual(7, len(results))
+        self.assertEqual(8, len(results))
 
         # Check "f1", a double file instance of plagiarism
         self.assertIn((('hash\\Alan Cox f1\\main.py',
@@ -66,4 +67,13 @@ class TestPlagiarism(TestCase):
                        ('hash\\Pope Linus f5\\Lorem.txt',
                         '2d8c2f6d978ca21712b5f6de36c9d31fa8e96a4fa5d8ff8b0188dfb9e7c171bb',
                         'Pope Linus f5')),
+                      results)
+
+        # Check "f7", an instance of an injected matched hash
+        self.assertIn((('hash\\Linus Sebastian f7\\File_o_File.txt',
+                        'aa9034d059fd0c902176471e7075d250bb87e7466bb7d4abdb2fa52e3dfaf959',
+                        'Linus Sebastian f7'),
+                       ('',
+                        '',
+                        'Given hash')),
                       results)
