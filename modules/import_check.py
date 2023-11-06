@@ -4,11 +4,13 @@ from typing import List
 
 
 class ImportCheck(object):
-    def __init__(self, check_directory: str):
+    def __init__(self, check_directory: str, penalty: str = ""):
         """
         :param check_directory: Directory to check for imports
+        :param penalty: (optional) Add a note about the points taken off for not importing a module
         """
         self.__check_directory = check_directory
+        self.__penalty = penalty
 
     def check(self, file: str, module: str, add_to_file=True) -> List[str]:
         """
@@ -42,7 +44,8 @@ class ImportCheck(object):
                                     with open(self.__check_directory + os.path.sep + f"{folder}.txt", "r") as \
                                             feedback_file:
                                         feedback = feedback_file.read()
-                                    contents = f"You did not import (and therefore did not use) {module}\n" + feedback
+                                    contents = f"You did not import (and therefore did not use) {module} " + \
+                                               self.__penalty + "\n" + feedback
                                     with open(self.__check_directory + os.path.sep + f"{folder}.txt", "w") as \
                                             feedback_file:
                                         feedback_file.write(contents)
