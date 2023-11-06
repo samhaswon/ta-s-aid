@@ -47,7 +47,7 @@ class ImportCheck(object):
                                             feedback_file:
                                         feedback_file.write(contents)
                                 except FileNotFoundError:
-                                    raise Exception("Not file to write to. Consider creating an output file for each "
+                                    raise Exception("No file to write to. Consider creating an output file for each "
                                                     "folder or use the output of the function. You may consider using "
                                                     "the unit test module for this task.")
                             no_import_list.append(path)
