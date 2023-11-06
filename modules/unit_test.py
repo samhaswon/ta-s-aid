@@ -107,15 +107,14 @@ def all_failed() -> str:
 
 
 class UnitTest(object):
-    def __init__(self, student_list: List[str], repo_directory: str, test_dir_name="test") -> None:
+    def __init__(self, repo_directory: str, test_dir_name="test") -> None:
         """
         Create a UnitTest object to perform unit-testing of student code
-        :param student_list: List of student IDs that are used as the name of folders for their repos
         :param repo_directory: directory that the repos are in
         :param test_dir_name: (optional) Name of the test directory in the repo, default of "test"
         """
         self.__repo_directory = repo_directory
-        self.__student_list = student_list
+        self.__student_list: List[str] = [x[1] for x in os.walk(repo_directory)][0]
         self.__test_dir = test_dir_name
 
         # Figure out what this system's python command is
@@ -129,6 +128,13 @@ class UnitTest(object):
 
     @staticmethod
     def __feedback(error_count: int, failure_count: int, total: int) -> str:
+        """
+        Gets an appropriate feedback string
+        :param error_count: number of errors in the unit-test run
+        :param failure_count: number of failures in the unit-test run
+        :param total: total number of tests in the unit-test run
+        :return: feedback string
+        """
         if (failure_count + error_count) == total:
             return all_failed()
         if error_count and failure_count:
@@ -149,20 +155,20 @@ class UnitTest(object):
         threads = []
         for student in self.__student_list:
             print(f"[Unittest] Running tests for {student}")
-            threads.append(ThreadWRV(target=self.test_thread, args=[student]))
+            threads.append(ThreadWRV(target=self._test_thread, args=[student]))
             threads[-1].start()
         for thread in threads:
             results.append(thread.join())
         for student, output in results:
-            Thread(target=self.results_thread, args=[student, output]).run()
+            Thread(target=self._results_thread, args=[student, output]).run()
 
-    def test_thread(self, student):
+    def _test_thread(self, student):
         output = subprocess.Popen(
             f"cd {self.__repo_directory}/{student}/ && {self.__py_cmd} -m unittest discover {self.__test_dir}",
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate()[1].decode("utf-8")
         return student, output
 
-    def results_thread(self, student, output):
+    def _results_thread(self, student, output):
         # Get the run summary, counting the errors, failures, and passes
         run_result = output.splitlines()[0]
         error_count = run_result.count("E")
