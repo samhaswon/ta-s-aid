@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 import re
 import shutil
+from typing import Union
 from zipfile import ZipFile, BadZipfile
 
 
@@ -12,13 +13,19 @@ class ILearnZip(object):
         self.__output_dir = output_dir
         self.__zip_expected = zip_expected
 
-    def extract(self):
+    def extract(self) -> None:
+        """
+        Extract the given zip file
+        :return: None
+        """
         # Extract the main zip file
         if os.path.isdir(self.__output_dir):
             delete_existing = input(f"{self.__output_dir} already exists. Removing it will allow extraction to "
                                     f"continue. Would you like to remove it? (y/n) ")
             if delete_existing.lower() == "y":
                 shutil.rmtree(self.__output_dir)
+            else:
+                return
         try:
             with ZipFile(self.__path_to_zip, "r") as sub_zip:
                 sub_zip.testzip()
@@ -80,7 +87,10 @@ class ILearnZip(object):
                         total_entry_archive += 1
 
                         total_size_archive += len(data)
-                        ratio = len(data) / zinfo.compress_size
+                        if zinfo.compress_size:
+                            ratio = len(data) / zinfo.compress_size
+                        else:
+                            ratio = 0
 
                         if ratio > threshold_ratio:
                             print("![Zip] ERROR: Highly compressed zip file. Could be a zip bomb.")
@@ -95,7 +105,7 @@ class ILearnZip(object):
                             unzip_it = False
                             break
                     if unzip_it:
-                        zfile.extractall(path=self.__output_dir)
+                        zfile.extractall(path=self.__output_dir + os.path.sep + submission[18:submission.find("-", 18)])
                     zfile.close()
                     os.remove(self.__output_dir + os.path.sep + submission)
                 except BadZipfile as e:
@@ -124,7 +134,15 @@ class ILearnZip(object):
                 if not os.path.isfile(dest_file):
                     os.rename(src_file, dest_file)
 
-    def inject(self, file: str, output: str) -> None:
+    def inject(self, file: str, output: Union[str, None]) -> None:
+        """
+        Inject the given file into the student's submission directory
+        :param file: Relative path to the file to inject
+        :param output: (optional) name in the student directory to inject the file as
+        :return: None
+        """
+        if not output:
+            output = file
         if output.startswith("./"):
             output = output[2:]
         student_list = [x[1] for x in os.walk(os.getcwd() + os.path.sep + self.__output_dir)][0]
