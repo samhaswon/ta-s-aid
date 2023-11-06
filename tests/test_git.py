@@ -1,5 +1,6 @@
 from unittest import TestCase
 from modules.git import Git
+import os
 
 
 class TestGit(TestCase):
@@ -9,6 +10,11 @@ class TestGit(TestCase):
                 student_list = student_file.read().splitlines()
             repo_list = [(student, "lab-05-unittest") for student in student_list]
             git = Git("gitlab.csc.tntech.edu:csc2310-sp23-students", True)
-            git.clone(repo_list, "test_destination")
+            commit_summary = git.clone(repo_list, "test_destination")
+
+            # Get the number of folders and commit summaries, making sure we got everything
+            folders = [x[1] for x in os.walk("test_destination")][0]
+            self.assertEqual(len(student_list), len(folders))
+            self.assertEqual(len(student_list), len(commit_summary))
         except Exception as e:
             self.fail(f"Failure: \n\n{e}")
