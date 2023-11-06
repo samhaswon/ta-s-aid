@@ -44,10 +44,10 @@ class TestPlagiarism(TestCase):
 
         # Check "f3", plagiarism with just a file name change
         self.assertIn((('hash\\Jens Axboe f3\\Cats.txt',
-                        'bcc33f0b81d2d3129deb62ac658cd0ac9362040a58cee75fc3067e180f95bbef',
+                        'd8e380820112c5dc699d7b79570fd1ba4788155c96135eaa70cfcf96cb178bb0',
                         'Jens Axboe f3'),
                        ('hash\\Moshe Bar f3\\not_Cats.txt',
-                        'bcc33f0b81d2d3129deb62ac658cd0ac9362040a58cee75fc3067e180f95bbef',
+                        'd8e380820112c5dc699d7b79570fd1ba4788155c96135eaa70cfcf96cb178bb0',
                         'Moshe Bar f3')),
                       results)
 
