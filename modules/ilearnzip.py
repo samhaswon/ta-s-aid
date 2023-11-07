@@ -32,6 +32,7 @@ class ILearnZip(object):
                 sub_zip.extractall(path=self.__output_dir)
         except BadZipfile as e:
             print(f"[Zip] Bad iLearn Zip File:\n\n{e}")
+            exit(1)
         # Remove the annoying index.html file
         os.remove(f"{self.__output_dir + os.path.sep}index.html")
 
