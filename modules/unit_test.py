@@ -165,7 +165,8 @@ class UnitTest(object):
     def _test_thread(self, student):
         output = subprocess.Popen(
             f"cd {self.__repo_directory}/{student}/ && {self.__py_cmd} -m unittest discover {self.__test_dir}",
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate()[1].decode("utf-8")
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate()
+        output = output[1].decode("utf-8") + output[0].decode("utf-8")
         return student, output
 
     def _results_thread(self, student, output):
