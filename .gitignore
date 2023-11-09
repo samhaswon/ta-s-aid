@@ -6,3 +6,4 @@ tests/ids.txt
 *.zip
 test_potion.py
 submissions/
+test_sandwich.py
