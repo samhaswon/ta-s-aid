@@ -13,9 +13,10 @@ class ILearnZip(object):
         self.__output_dir = output_dir
         self.__zip_expected = zip_expected
 
-    def extract(self) -> None:
+    def extract(self, normalize_filename: Union[str, None] = None) -> None:
         """
         Extract the given zip file
+        :param normalize_filename: Name to normalize files to if provided
         :return: None
         """
         # Extract the main zip file
@@ -125,10 +126,13 @@ class ILearnZip(object):
                 os.mkdir(directory_name + os.path.sep + student)
 
             # Find their files in the submissions
-            student_files = list(filter(lambda x: student in x, sub_list))
+            student_files = list(filter(lambda x: re.search(r"\s" + student, x), sub_list))
 
             for file in student_files:
                 base_name = re.search(r"(?<=[A|P]M\s-\s).+", file).group(0)
+                if normalize_filename and base_name != normalize_filename:
+                    print(f"[iLearn] Normalizing {base_name} to {normalize_filename} for {student}")
+                    base_name = normalize_filename
                 # Put their files in their folder
                 src_file = os.path.join(directory_name, file)
                 dest_file = os.path.join(directory_name, student, base_name)
