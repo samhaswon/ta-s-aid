@@ -4,13 +4,13 @@ from typing import Union, List, Tuple
 
 
 class Plagiarism(object):
-    def __init__(self, check_directory: str, ignored_files: Union[List[str], None]) -> None:
+    def __init__(self, check_directory: str, ignored_files: Union[List[str], None] = None) -> None:
         """
         Created a plagiarism object for a given directory
         :param check_directory:
         """
         self.__check_directory = check_directory
-        self.__ignored_files = ignored_files
+        self.__ignored_files = ignored_files if ignored_files else []
         self.__seen_hashes = []
         self.__new_hashes = []
         self.__hash_passed_files = []
