@@ -2,6 +2,7 @@ from modules.helpers.good_job import good_job
 from modules.helpers.threadwrv import ThreadWRV
 import os
 import random
+import re
 import shutil
 import subprocess
 from threading import Thread
@@ -118,10 +119,10 @@ class UnitTest(object):
         self.__test_dir = test_dir_name
 
         # Figure out what this system's python command is
-        if not os.system("python3 --version"):
-            self.__py_cmd = "python3"
-        elif not os.system("python --version"):
+        if not os.system("python --version"):
             self.__py_cmd = "python"
+        elif not os.system("python3 --version"):
+            self.__py_cmd = "python3"
         else:
             self.__py_cmd = "py"
         print(f"[Unittest] Using python command: {self.__py_cmd}")
@@ -154,19 +155,42 @@ class UnitTest(object):
         results = []
         threads = []
         for student in self.__student_list:
-            print(f"[Unittest] Running tests for {student}")
+            print(f"[Unittest] Running tests for {student}...")
             threads.append(ThreadWRV(target=self._test_thread, args=[student]))
             threads[-1].start()
+            if len(threads) > 20:
+                if not threads[0].is_alive():
+                    result = threads[0].join()
+                    if result:
+                        results.append(result)
+                        threads.pop(0)
         for thread in threads:
-            results.append(thread.join())
+            result = thread.join()
+            if result:
+                results.append(result)
         for student, output in results:
             Thread(target=self._results_thread, args=[student, output]).run()
 
     def _test_thread(self, student):
-        output = subprocess.Popen(
+        files = [y for y in
+                 [x[2] for x in os.walk(f"{self.__repo_directory}/{student}/")][0]
+                 if not y.startswith("test") and y.endswith(".py")]
+        for file in files:
+            with open(f"{self.__repo_directory}/{student}/{file}", "r") as code_file:
+                file_data = code_file.read()
+            if re.search(r"=\s*input\(.*?\)", file_data):
+                print(f"![Unittest] Unable to process tests for {student}")
+                return student, "Unable to process tests"
+        process = subprocess.Popen(
             f"cd {self.__repo_directory}/{student}/ && {self.__py_cmd} -m unittest discover {self.__test_dir}",
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate()
-        output = output[1].decode("utf-8") + output[0].decode("utf-8")
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        try:
+            process_output = process.communicate(timeout=5)
+            output = process_output[1].decode("utf-8") + process_output[0].decode("utf-8")
+        except subprocess.TimeoutExpired:
+            output = "Timeout expired"
+            print(f"![Unittest] Test thread timeout expired for {student}")
+            process.kill()
         return student, output
 
     def _results_thread(self, student, output):
