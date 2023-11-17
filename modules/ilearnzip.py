@@ -77,7 +77,7 @@ class ILearnZip(object):
                     # Adapted from: https://rules.sonarsource.com/python/RSPEC-5042/
                     threshold_entries = 10000
                     threshold_size = 1000000000
-                    threshold_ratio = 10
+                    threshold_ratio = 20
 
                     total_size_archive = 0
                     total_entry_archive = 0
@@ -95,19 +95,21 @@ class ILearnZip(object):
                             ratio = 0
 
                         if ratio > threshold_ratio:
-                            print("![Zip] ERROR: Highly compressed zip file. Could be a zip bomb.")
+                            print(f"![Zip] ERROR: Highly compressed zip file. Could be a zip bomb. {submission}")
                             unzip_it = False
                             break
                         if total_size_archive > threshold_size:
-                            print("![Zip] ERROR: Weirdly large zip file. Not decompressing")
+                            print(f"![Zip] ERROR: Weirdly large zip file. Not decompressing. {submission}")
                             unzip_it = False
                             break
                         if total_entry_archive > threshold_entries:
-                            print("![Zip] ERROR: Too many files. Not decompressing.")
+                            print(f"![Zip] ERROR: Too many files. Not decompressing. {submission}")
                             unzip_it = False
                             break
                     if unzip_it:
-                        zfile.extractall(path=self.__output_dir + os.path.sep + submission[18:submission.find("-", 18)])
+                        start = submission.find("-", 9) + 2
+                        end = submission.rfind("-", start, submission.rfind("-") - 1)
+                        zfile.extractall(path=self.__output_dir + os.path.sep + submission[start:end])
                     zfile.close()
                     os.remove(self.__output_dir + os.path.sep + submission)
                 except BadZipfile as e:
@@ -117,7 +119,7 @@ class ILearnZip(object):
 
         # Get all the students' names
         sub_list = [x[2] for x in os.walk(directory_name)][0]
-        student_list = [x[18:x.find("-", 18)] for x in sub_list]
+        student_list = [x[x.find("-", 9) + 2:x.rfind("-", 0, x.rfind("-"))] for x in sub_list]
 
         # Make their folders, moving their submission into their folder
         for student in student_list:
