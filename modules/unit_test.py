@@ -211,5 +211,6 @@ class UnitTest(object):
             "=" * shutil.get_terminal_size((70, 20)).columns + "\n\n"
 
         # Save the run result
-        with open(f"{self.__repo_directory}/{student}.txt", "w") as output_file:
-            output_file.write(summary + output)
+        result = summary + output
+        with open(f"{self.__repo_directory}/{student}.txt", "wb") as output_file:
+            output_file.write(result.encode('utf-8', 'ignore'))
