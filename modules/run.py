@@ -39,10 +39,16 @@ class Run(object):
         :param sub_folder: folder to run the command in
         :return: folder name, output string
         """
-        output = subprocess.Popen(
+        process = subprocess.Popen(
             f"cd {self.__directory}/{sub_folder}/ && {command}",
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate(timeout=30)
-        return sub_folder, output[1].decode("utf-8") + output[0].decode("utf-8")
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        try:
+            output = process.communicate(timeout=10)
+            return sub_folder, output[1].decode("utf-8") + output[0].decode("utf-8")
+        except subprocess.TimeoutExpired:
+            print(f"![Run] Test thread timeout expired for {sub_folder}")
+            process.kill()
+            return sub_folder, "Timeout expired"
 
     def _save_result(self, student: str, result: str) -> None:
         """
