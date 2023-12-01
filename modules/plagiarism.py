@@ -1,16 +1,21 @@
 import hashlib
 import os
+import re
 from typing import Union, List, Tuple
 
 
 class Plagiarism(object):
-    def __init__(self, check_directory: str, ignored_files: Union[List[str], None] = None) -> None:
+    def __init__(self, check_directory: str, ignored_files: Union[List[str], None] = None,
+                 ignored_files_r: Union[List[str], None] = None) -> None:
         """
-        Created a plagiarism object for a given directory
-        :param check_directory:
+        Created a plagiarism object for a given directory.
+        :param check_directory: Directory to check.
+        :param ignored_files: List of literal file names/paths to ignore.
+        :param ignored_files_r: List of regex strings to ignore files.
         """
         self.__check_directory = check_directory
         self.__ignored_files = ignored_files if ignored_files else []
+        self.__ignored_files_r = ignored_files_r if ignored_files_r else []
         self.__seen_hashes = []
         self.__new_hashes = []
         self.__hash_passed_files = []
@@ -73,6 +78,13 @@ class Plagiarism(object):
             for filename in files:
                 if filename not in self.__ignored_files:
                     relative_path = os.path.relpath(os.path.join(root, filename))
+                    ignored = False
+                    if len(self.__ignored_files_r):
+                        for regex in self.__ignored_files_r:
+                            if re.search(regex, relative_path):
+                                ignored = True
+                    if ignored:
+                        continue
                     file_list.append(relative_path)
         return [(file, self._get_hash(file), rel_folder) for file in file_list]
 
