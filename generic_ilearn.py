@@ -25,6 +25,8 @@ if __name__ == '__main__':
     plagiarism_check = Plagiarism("./submissions",
                                   ["contacts.json", "events.json",
                                    ],
-                                  [r"env", r"idea", r"MACOSX", r"git", r"pdf$"
+                                  [r"env", r"idea", r"MACOSX", r"git", r"pdf$", r"events.json", r"contacts.json",
+                                   r"pycache", r"tests", r"UI", r"main\.py", r"README\.md", r"Calendar", r"Contact",
+                                   r"Event\.py"
                                    ])
     print(plagiarism_check.check_hash_str())
