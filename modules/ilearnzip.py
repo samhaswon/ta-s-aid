@@ -119,7 +119,10 @@ class ILearnZip(object):
 
         # Get all the students' names
         sub_list = [x[2] for x in os.walk(directory_name)][0]
-        student_list = [x[x.find("-", 9) + 2:x.rfind("-", 0, x.rfind("-"))] for x in sub_list]
+        student_list = [x[x.find("-", 9) + 2:x.rfind("-",
+                                                     0, x.rfind("-") if x.count("-") == 4 else
+                                                     x.rfind("-", 0, x.rfind("-")))].strip()
+                        for x in sub_list]
 
         # Make their folders, moving their submission into their folder
         for student in student_list:
