@@ -197,8 +197,8 @@ Parameters:
 
 ## Properties
 
-### `seen_hashes`
-- 
+`seen_hashes`
+
 - Getter and setter for a list of all seen and new hashes.
 - Used to retrieve and inject old file hashes for comparison.
 
