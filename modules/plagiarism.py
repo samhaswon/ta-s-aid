@@ -8,7 +8,7 @@ class Plagiarism(object):
     def __init__(self, check_directory: str, ignored_files: Union[List[str], None] = None,
                  ignored_files_r: Union[List[str], None] = None) -> None:
         """
-        Created a plagiarism object for a given directory.
+        Create a plagiarism object for a given directory.
         :param check_directory: Directory to check.
         :param ignored_files: List of literal file names/paths to ignore.
         :param ignored_files_r: List of regex strings to ignore files.
