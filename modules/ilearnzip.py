@@ -118,8 +118,10 @@ class ILearnZip(object):
                         else:
                             ratio = 0
 
-                        # Macs are weird in their method of compression, so account for that.
-                        if ratio > threshold_ratio and not zinfo.filename.startswith("__MACOSX"):
+                        if ratio > threshold_ratio:
+                            # Macs are weird in their creation of zip files, so account for that.
+                            if (zinfo.filename.startswith("__MACOSX/") or ".DS_Store" in zinfo.filename) and ratio < 98:
+                                continue
                             print(f"![Zip] ERROR: Highly compressed zip file. Could be a zip bomb. {submission}")
                             unzip_it = False
                             break
