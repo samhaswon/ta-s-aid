@@ -4,7 +4,27 @@ from pathlib import Path
 import re
 import shutil
 from typing import Union
-from zipfile import ZipFile, BadZipfile
+from zipfile import BadZipfile, ZipFile as BrokenZipFile
+
+
+class ZipFile(BrokenZipFile):
+    """
+    Corrects a bug present in the standard library
+    """
+
+    def __init__(self, *args, **kwargs):
+        """
+        Pass everything to the standard lib ZipFile
+        :param args: args
+        :param kwargs: kwargs
+        """
+        super().__init__(*args, **kwargs)
+
+    @classmethod
+    def _sanitize_windows_name(cls, arcname, pathsep):
+        """Fix the standard lib's sanitization"""
+        return re.sub(r"(?<=[/\w\\]) (?=[/\\])|(?<=[/\w\\]) $", "",
+                      super()._sanitize_windows_name(arcname, pathsep))  # PyCharm hates this, but it works
 
 
 class ILearnZip(object):
@@ -94,7 +114,8 @@ class ILearnZip(object):
                         else:
                             ratio = 0
 
-                        if ratio > threshold_ratio:
+                        # Macs are weird in their method of compression, so account for that.
+                        if ratio > threshold_ratio and not zinfo.filename.startswith("__MACOSX"):
                             print(f"![Zip] ERROR: Highly compressed zip file. Could be a zip bomb. {submission}")
                             unzip_it = False
                             break
@@ -108,8 +129,9 @@ class ILearnZip(object):
                             break
                     if unzip_it:
                         start = submission.find("-", 9) + 2
-                        end = submission.rfind("-", start, submission.rfind("-") - 1)
-                        zfile.extractall(path=self.__output_dir + os.path.sep + submission[start:end])
+                        end = submission.find("- ", start)
+                        path = self.__output_dir + os.path.sep + submission[start:end]
+                        zfile.extractall(path=path)
                     zfile.close()
                     os.remove(self.__output_dir + os.path.sep + submission)
                 except BadZipfile as e:
