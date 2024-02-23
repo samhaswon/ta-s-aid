@@ -9,7 +9,7 @@ from zipfile import BadZipfile, ZipFile as BrokenZipFile
 
 class ZipFile(BrokenZipFile):
     """
-    Corrects a bug present in the standard library
+    Corrects a bug present in the standard library and makes this class more appropriate for this application.
     """
 
     def __init__(self, *args, **kwargs):
@@ -25,6 +25,21 @@ class ZipFile(BrokenZipFile):
         """Fix the standard lib's sanitization"""
         return re.sub(r"(?<=[/\w\\]) (?=[/\\])|(?<=[/\w\\]) $", "",
                       super()._sanitize_windows_name(arcname, pathsep))  # PyCharm hates this, but it works
+
+    def extractall(self, path=None, members=None, pwd=None):
+        """
+        Fix for the security hole of zip bombs by reimplementing extractall and ignoring those files. Also ignores
+        __pycache__/ and .idea/ folders
+        """
+        if members is None:
+            members = self.namelist()
+
+        path = os.getcwd() if path is None else os.fspath(path)
+
+        for zipinfo in members:
+            if "__MACOSX/" in zipinfo or ".DS_Store" in zipinfo or ".idea" in zipinfo or "__pycache__" in zipinfo:
+                continue
+            self._extract_member(zipinfo, path, pwd)
 
 
 class ILearnZip(object):
