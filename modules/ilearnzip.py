@@ -66,6 +66,7 @@ class ILearnZip(object):
             if len(student_sub_list) > 1:
                 max_date = None
                 latest_submission = None
+                latest_list = []
 
                 # Find the latest submission
                 for sub in student_sub_list:
@@ -78,9 +79,12 @@ class ILearnZip(object):
                         if max_date is None or date > max_date:
                             max_date = date
                             latest_submission = sub
+                            latest_list = [sub]
+                        elif date == max_date:
+                            latest_list.append(sub)
                 # Remove the student's other submissions
                 for sub in sub_list:
-                    if i_learn_id in sub and sub != latest_submission:
+                    if i_learn_id in sub and sub not in latest_list:
                         os.remove(directory_name + os.path.sep + sub)
                         sub_list.remove(sub)
 
