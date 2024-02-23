@@ -27,6 +27,6 @@ if __name__ == '__main__':
                                    ],
                                   [r"env", r"idea", r"MACOSX", r"git", r"pdf$", r"events.json", r"contacts.json",
                                    r"pycache", r"tests", r"UI", r"main\.py", r"README\.md", r"Calendar", r"Contact",
-                                   r"Event\.py"
+                                   r"Event\.py", r".*init__\.py"
                                    ])
     print(plagiarism_check.check_hash_str())
