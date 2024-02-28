@@ -23,7 +23,7 @@ class ZipFile(BrokenZipFile):
     @classmethod
     def _sanitize_windows_name(cls, arcname, pathsep):
         """Fix the standard lib's sanitization"""
-        return re.sub(r"(?<=[/\w\\]) (?=[/\\])|(?<=[/\w\\]) $", "",
+        return re.sub(r"(?<=[/\w\\]) (?=[/\\])|(?<=[/\w\\]) $|[\u0080-\uffef]", "",
                       super()._sanitize_windows_name(arcname, pathsep))  # PyCharm hates this, but it works
 
     def extractall(self, path=None, members=None, pwd=None):
@@ -162,10 +162,8 @@ class ILearnZip(object):
 
         # Get all the students' names
         sub_list = [x[2] for x in os.walk(directory_name)][0]
-        student_list = [x[x.find("-", 9) + 2:x.rfind("-",
-                                                     0, x.rfind("-") if x.count("-") == 4 else
-                                                     x.rfind("-", 0, x.rfind("-")))].strip()
-                        for x in sub_list]
+        student_list = list(set([x[x.find("-", 9) + 2:x.find("- ", x.find(" - ") + 4)].strip()
+                                 for x in sub_list]))
 
         # Make their folders, moving their submission into their folder
         for student in student_list:
