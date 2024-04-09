@@ -178,7 +178,7 @@ class UnitTest(object):
         for file in files:
             with open(f"{self.__repo_directory}/{student}/{file}", "r") as code_file:
                 file_data = code_file.read()
-            if re.search(r"=\s*input\(.*?\)", file_data):
+            if re.search(r"=.*?input\(.*?\)", file_data):
                 print(f"![Unittest] Unable to process tests for {student}")
                 return student, "Unable to process tests"
         process = subprocess.Popen(
