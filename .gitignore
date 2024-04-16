@@ -6,6 +6,5 @@ tests/ids.txt
 *.zip
 test_potion.py
 submissions/
-test_sandwich.py
 *__pycache__*
 students.json
