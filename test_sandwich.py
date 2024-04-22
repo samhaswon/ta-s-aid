@@ -2,7 +2,19 @@ import inspect
 import unittest
 import random
 import re
-from sandwich import Sandwich, Meal, KidsMeal
+# Attempt to account for some typos
+try:
+    from sandwich import Sandwich
+except ImportError:
+    from sandwich import Sandwhich as Sandwich
+try:
+    from sandwich import Meal
+except ImportError:
+    from sandwich import meal as meal
+try:
+    from sandwich import KidsMeal
+except ImportError:
+    from sandwich import Kids as KidsMeal
 
 
 def make_arg(name):
@@ -33,6 +45,8 @@ def make_arg(name):
                               "Doritos", "Beans and Rice", "Banana"])
     elif "toy" in name or "ty" in name or "kid" in name:
         return random.choice(["Action figure", "Animal figure", "Tiny skateboard", "Movie toy"])
+    elif "topping" in name or "tops" in name:
+        return []
     return "Something"
 
 
@@ -87,7 +101,7 @@ class TestLab5(unittest.TestCase):
         # Figure out what the meat method is
         meat_method = \
             [method for method in self.sandwich_methods if "meat" in method.lower() or "met" in method.lower() or "veg"
-             in method.lower()][0]
+             in method.lower() or "mainfill" in method.lower()][0]
         # make sure we have it, then make sure it is a property
         self.assertTrue(len(meat_method) > 0, msg="You did not define a meat/veggie property")
         self.assertFalse(callable(getattr(self.sandwich, meat_method)),
@@ -108,12 +122,12 @@ class TestLab5(unittest.TestCase):
                          msg="Your price without toppings for Sandwich is incorrect")
 
         # Figure out what the topping methods are
-        topping_methods = [method for method in self.sandwich_methods if "top" in method.lower() or "sauce" in
-                           method.lower()]
+        topping_methods = [method for method in self.sandwich_methods if "get" not in method.lower() and
+                           "top" in method.lower() or "filln" in method.lower()]
         add_topping_method = [method for method in topping_methods if "add" in method.lower() or "remove" not in
                               method.lower()][0]
-        remove_topping_method = [method for method in topping_methods if "remove" in method.lower() or "add" not in
-                                 method.lower()][0]
+        remove_topping_method = [method for method in topping_methods if "remove" in method.lower() or
+                                 "rmv" in method.lower() or "add" not in method.lower()][0]
         # Make sure we have the methods
         self.assertTrue(len(add_topping_method) > 0, msg="You do not have a method to add toppings for Sandwich")
         self.assertTrue(len(remove_topping_method) > 0, msg="You do not have a method to remove toppings for Sandwich")
@@ -212,12 +226,12 @@ class TestLab5(unittest.TestCase):
                          msg="Your price without toppings for meal is incorrect")
 
         # Figure out what the topping methods are
-        topping_methods = [method for method in self.meal_methods if "top" in method.lower() or "sauce" in
-                           method.lower()]
+        topping_methods = [method for method in self.meal_methods if "get" not in method.lower() and
+                           "top" in method.lower() or "filln" in method.lower()]
         add_topping_method = [method for method in topping_methods if "add" in method.lower() or "remove"
                               not in method.lower()][0]
-        remove_topping_method = [method for method in topping_methods if "remove" in method.lower() or "add"
-                                 not in method.lower()][0]
+        remove_topping_method = [method for method in topping_methods if "remove" in method.lower() or
+                                 "rmv" in method.lower() or "add" not in method.lower()][0]
         # Make sure we have the methods
         self.assertTrue(len(add_topping_method) > 0, msg="You do not have a method to add toppings for meal")
         self.assertTrue(len(remove_topping_method) > 0, msg="You do not have a method to remove toppings for meal")
@@ -303,12 +317,12 @@ class TestLab5(unittest.TestCase):
                          msg="Your price without toppings for KidsMeal is incorrect")
 
         # Figure out what the topping methods are
-        topping_methods = [method for method in self.kids_meal_methods if "top" in method.lower() or "sauce" in
-                           method.lower()]
+        topping_methods = [method for method in self.kids_meal_methods if "get" not in method.lower() and
+                           "top" in method.lower() or "filln" in method.lower()]
         add_topping_method = [method for method in topping_methods if "add" in method.lower() or "remove" not in
                               method.lower()][0]
-        remove_topping_method = [method for method in topping_methods if "remove" in method.lower() or "add" not in
-                                 method.lower()][0]
+        remove_topping_method = [method for method in topping_methods if "remove" in method.lower() or
+                                 "rmv" in method.lower() or "add" not in method.lower()][0]
         # Make sure we have the methods
         self.assertTrue(len(add_topping_method) > 0, msg="You do not have a method to add toppings for KidsMeal")
         self.assertTrue(len(remove_topping_method) > 0, msg="You do not have a method to remove toppings for KidsMeal")
