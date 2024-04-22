@@ -11,7 +11,7 @@ if __name__ == '__main__':
         exit(1)
 
     # Find the submission .zip file and extract it
-    submission_zip: str = [x for x in os.listdir(os.getcwd()) if x.endswith(".zip") and "Lab 05" in x][0]
+    submission_zip: str = [x for x in os.listdir(os.getcwd()) if x.endswith(".zip") and "Lab 5" in x][0]
     i_learn_zip = ILearnZip(submission_zip, zip_expected=False)
     i_learn_zip.extract(normalize_filename="sandwich.py")
 
