@@ -195,20 +195,23 @@ class UnitTest(object):
 
     def _results_thread(self, student, output):
         # Get the run summary, counting the errors, failures, and passes
-        run_result = output.splitlines()[0]
-        error_count = run_result.count("E")
-        failure_count = run_result.count("F")
-        pass_count = run_result.count(".")
-        total = error_count + failure_count + pass_count
+        try:
+            run_result = output.splitlines()[0]
+            error_count = run_result.count("E")
+            failure_count = run_result.count("F")
+            pass_count = run_result.count(".")
+            total = error_count + failure_count + pass_count
 
-        # Add a summary to the output file
-        summary = \
-            self.__feedback(error_count, failure_count, total) + "\n" + \
-            f"Errors: {error_count}\n" + \
-            f"Failures: {failure_count}\n" + \
-            f"Passed: {pass_count}\n" + \
-            f"Total: {total}\n" + \
-            "=" * shutil.get_terminal_size((70, 20)).columns + "\n\n"
+            # Add a summary to the output file
+            summary = \
+                self.__feedback(error_count, failure_count, total) + "\n" + \
+                f"Errors: {error_count}\n" + \
+                f"Failures: {failure_count}\n" + \
+                f"Passed: {pass_count}\n" + \
+                f"Total: {total}\n" + \
+                "=" * shutil.get_terminal_size((70, 20)).columns + "\n\n"
+        except IndexError:
+            summary = "Something went wildly wrong. The code has spectacularly failed so hard I received no error.\n"
 
         # Save the run result
         result = summary + output
