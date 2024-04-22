@@ -176,7 +176,8 @@ class ILearnZip(object):
 
             for file in student_files:
                 base_name = re.search(r"(?<=[A|P]M\s-\s).+", file).group(0)
-                if normalize_filename and base_name != normalize_filename:
+                if (normalize_filename and base_name != normalize_filename and
+                        os.path.splitext(base_name)[1] == os.path.splitext(normalize_filename)[1]):
                     print(f"[iLearn] Normalizing {base_name} to {normalize_filename} for {student}")
                     base_name = normalize_filename
                 # Put their files in their folder
