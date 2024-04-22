@@ -8,10 +8,12 @@ def good_job() -> str:
     """
     congratulations = [
         "Good job!",
+        "Good work!",
         "Well done!",
         "Excellent work!",
         "Fantastic!",
         "You did great!",
+        "You did well.",
         "Keep up the good work!",
         "You're doing a great job!",
         "That's the way to go!",
