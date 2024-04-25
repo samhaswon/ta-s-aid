@@ -15,6 +15,7 @@ if __name__ == '__main__':
     submission_zip: str = [x for x in os.listdir(os.getcwd()) if x.endswith(".zip") and "Lab 4" in x][0]
     i_learn_zip = ILearnZip(submission_zip, zip_expected=False)
     i_learn_zip.extract(normalize_filename="potion.py")
+    i_learn_zip.flatten()
     i_learn_zip.inject("./test_potion.py", "test_potion.py")
 
     # Check for plagiarism

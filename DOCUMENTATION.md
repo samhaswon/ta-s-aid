@@ -106,6 +106,14 @@ Parameters:
 
 Returns: None
 
+`flatten(self) -> None`
+
+Flattens the folder structure of submission. This is useful when a zip submission is expected and students have zipped a folder and a folder. This method recursively moves the contents of folders up.
+
+Parameters: None
+
+Returns: None
+
 </details>
 
 # Module: `ImportCheck`

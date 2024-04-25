@@ -43,10 +43,12 @@ class ZipFile(BrokenZipFile):
 
 
 class ILearnZip(object):
-    def __init__(self, path_to_zip: str, output_dir: str = "submissions", zip_expected: bool = True):
+    def __init__(self, path_to_zip: str, output_dir: str = "submissions", zip_expected: bool = True,
+                 no_venv: bool = True):
         self.__path_to_zip = path_to_zip
         self.__output_dir = output_dir
         self.__zip_expected = zip_expected
+        self.__no_venv = no_venv
 
     def extract(self, normalize_filename: Union[str, None] = None) -> None:
         """
@@ -188,7 +190,8 @@ class ILearnZip(object):
 
     def inject(self, file: str, output: Union[str, None]) -> None:
         """
-        Inject the given file into the student's submission directory
+        Inject the given file into the student's submission directory.
+        Submissions must have already been extracted.
         :param file: Relative path to the file to inject
         :param output: (optional) name in the student directory to inject the file as
         :return: None
@@ -200,3 +203,54 @@ class ILearnZip(object):
         student_list = [x[1] for x in os.walk(os.getcwd() + os.path.sep + self.__output_dir)][0]
         for student in student_list:
             shutil.copy(file, self.__output_dir + os.path.sep + student + os.path.sep + output)
+
+    def flatten(self) -> None:
+        """
+        Flattens the folder structure of submission.
+        This is useful when a zip submission is expected and students have zipped a folder and a folder.
+        This method recursively moves the contents of folders up.
+        :return: None
+        """
+        student_list = [x[1] for x in os.walk(os.getcwd() + os.path.sep + self.__output_dir)][0]
+        for student_folder in student_list:
+            self.__flatten_folder(os.getcwd() + os.path.sep + self.__output_dir + os.path.sep + student_folder)
+
+    def __flatten_folder(self, folder: str) -> None:
+        """
+        Recursively flattens an individual folder.
+        :param folder: The folder to flatten.
+        :return: None
+        """
+        # Look at the directory to see if there are files here.
+        # files = [x[2] for x in os.walk(folder)][0]
+        files = [x for x in os.scandir(folder) if os.path.isfile(x.path)]
+
+        # Guard clause for recursive calls (a.k.a., the base case).
+        # If there are files here, then we are done.
+        if len(files):
+            return
+
+        # Check the current state of the folder to see if we only have one folder.
+        raise_folders = [x[1] for x in os.walk(folder)][0]
+        if len(raise_folders) == 0 or len(raise_folders) > 1:
+            return
+
+        # Get our one folder from the list.
+        raise_folder_name = raise_folders[0]
+        # Move everything in that folder up.
+        for entity in [x for x in os.listdir(f"{folder}{os.path.sep}{raise_folder_name}")]:
+            # Account for the potential that a nested folder has the same name as its parent.
+            if entity == raise_folder_name:
+                shutil.move(f"{folder}{os.path.sep}{raise_folder_name}{os.path.sep}{entity}",
+                            f"{folder}{os.path.sep}{entity}1")
+            elif self.__no_venv and "venv" in entity:
+                shutil.rmtree(f"{folder}{os.path.sep}{raise_folder_name}{os.path.sep}{entity}")
+            # Otherwise, move everything up.
+            else:
+                shutil.move(f"{folder}{os.path.sep}{raise_folder_name}{os.path.sep}{entity}",
+                            f"{folder}{os.path.sep}{entity}")
+        # Remove the now empty folder.
+        os.rmdir(f"{folder}{os.path.sep}{raise_folder_name}")
+
+        # Recursive call
+        self.__flatten_folder(folder)
