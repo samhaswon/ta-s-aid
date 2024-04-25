@@ -20,7 +20,7 @@ Modules:
 
 Helpers:
 
-[good_job](#helper-goodjob)
+[good_job](#helper-good_job)
 
 [ThreadWRV](#helper-threadwrv)
 
