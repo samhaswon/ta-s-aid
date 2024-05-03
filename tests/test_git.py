@@ -18,3 +18,18 @@ class TestGit(TestCase):
             self.assertEqual(len(student_list), len(commit_summary))
         except Exception as e:
             self.fail(f"Failure: \n\n{e}")
+
+    def test_git_these(self):
+        repo_list = [
+            "amykapernick/no_js",
+            "github.com:raghur/mermaid-filter.git",
+            "/samhaswon/esv_api",
+            "git@github.com:brukmula/BasilAppBackEnd.git"
+        ]
+        git = Git("github.com", debug=True)
+        commit_summary = git.these(repo_list, destination="test_destination")
+
+        # Get the number of folders and commit summaries, making sure we got everything
+        folders = [x[1] for x in os.walk("test_destination")][0]
+        self.assertEqual(len(repo_list), len(folders))
+        self.assertEqual(len(repo_list), len(commit_summary))

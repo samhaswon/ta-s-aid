@@ -61,6 +61,19 @@ Parameters:
 
 Returns: List of Tuples in the format (student, last commit date).
 
+`these((self, repo_list: List[str], destination: str = "working_dir", print_summary=True) -> List[Tuple[str, str]]`
+
+Get a list of git repositories.
+
+Parameters:
+
+- `repo_list` (List[str]): The list of repositories to get. These can be paths, partial URLs, or full clone URLs
+- `destination` (str, default "working_dir"): The cloning destination for the repository folders 
+- `print_summary` (bool, default True): prints a summary of the commit dates if True
+        
+Returns: List of Tuples in the format (student, last commit date).
+
+
 </details>
 
 # Module: `ILearnZip`
