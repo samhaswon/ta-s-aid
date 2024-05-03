@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     output = ""
 
-    os.rename("students.json", "student.json")
+    os.rename("../students.json", "student.json")
 
     # Start the child process
     process = subprocess.Popen(f"{py_cmd} student.py",
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     output += f"Missing file: {missing_file[0].decode()}\n\tstderr: {missing_file[1].decode()}\n"
 
-    os.rename("student.json", "students.json")
+    os.rename("student.json", "../students.json")
 
     process.kill()
 

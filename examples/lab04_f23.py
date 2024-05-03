@@ -7,7 +7,7 @@ from modules.plagiarism import Plagiarism
 import os
 
 if __name__ == '__main__':
-    if not os.path.isfile("./test_potion.py"):
+    if not os.path.isfile("../test_potion.py"):
         print("Please place test_potion.py in this directory")
         exit(1)
 

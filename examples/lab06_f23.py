@@ -6,10 +6,10 @@ from modules.plagiarism import Plagiarism
 import os
 
 if __name__ == '__main__':
-    if not os.path.isfile("./lab06f23_test.py"):
+    if not os.path.isfile("examples/lab06f23_test.py"):
         print("Please place lab06f23_test.py in this directory")
         exit(1)
-    if not os.path.isfile("./students.json"):
+    if not os.path.isfile("../students.json"):
         print("Please place students.json in this directory")
         exit(1)
 
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     print(plagiarism_check.check_hash_str())
 
     # Inject the test
-    i_learn_zip.inject("./lab06f23_test.py", "lab06f23_test.py")
+    i_learn_zip.inject("examples/lab06f23_test.py", "lab06f23_test.py")
     i_learn_zip.inject("./students.json", "students.json")
 
     # Run all the unit tests

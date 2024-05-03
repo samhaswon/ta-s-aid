@@ -6,7 +6,7 @@ from modules.plagiarism import Plagiarism
 import os
 
 if __name__ == '__main__':
-    if not os.path.isfile("./test_sandwich.py"):
+    if not os.path.isfile("examples/test_sandwich.py"):
         print("Please place test_sandwich.py in this directory")
         exit(1)
 
@@ -21,7 +21,7 @@ if __name__ == '__main__':
     print(plagiarism_check.check_hash_str())
 
     # Inject the test
-    i_learn_zip.inject("./test_sandwich.py", "test_sandwich.py")
+    i_learn_zip.inject("examples/test_sandwich.py", "test_sandwich.py")
 
     # Run all the unit tests
     tester = UnitTest("./submissions", "")
