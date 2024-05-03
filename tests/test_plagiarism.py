@@ -77,3 +77,11 @@ class TestPlagiarism(TestCase):
                         '',
                         'Given hash')),
                       results)
+
+        self.assertNotIn((('hash\\Jeff a\\__init__.py',
+                           'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+                           'Jeff a'),
+                          ('hash\\Jeff b\\__init__.py',
+                           'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+                           'Jeff b')),
+                         results)

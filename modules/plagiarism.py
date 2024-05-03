@@ -42,7 +42,7 @@ class Plagiarism(object):
             # Search ahead for duplicates
             for j in range(i + 1, len(hashlist)):
                 # Add duplicates to results
-                if hashlist[i][1] == hashlist[j][1]:
+                if len(hashlist[i][1]) and hashlist[i][1] == hashlist[j][1] and hashlist[i][2] != hashlist[j][2]:
                     results.append((hashlist[i], hashlist[j]))
             # Add the new hash if it is not new
             if not len(self.__new_hashes) and hashlist[i][1] not in self.__seen_hashes:
@@ -99,6 +99,8 @@ class Plagiarism(object):
         file_hash = hashlib.new(mode)
         with open(file_path, 'rb') as file:
             data = file.read()
+        if not len(data):
+            return ""
         file_hash.update(data)
         return file_hash.hexdigest()
 
