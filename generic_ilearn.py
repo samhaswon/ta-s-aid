@@ -21,12 +21,15 @@ if __name__ == '__main__':
 
     i_learn_zip = ILearnZip(submission_zips[selection - 1], zip_expected=True)
     i_learn_zip.extract()
+    i_learn_zip.flatten()
 
     plagiarism_check = Plagiarism("./submissions",
-                                  ["contacts.json", "events.json",
-                                   ],
-                                  [r"env", r"idea", r"MACOSX", r"git", r"pdf$", r"events.json", r"contacts.json",
-                                   r"pycache", r"tests", r"UI", r"main\.py", r"README\.md", r"Calendar", r"Contact",
-                                   r"Event\.py", r".*init__\.py"
+                                  [
+                                      "contacts.json", "events.json", "requirements.txt", "validators.py",
+                                      "gui.py",
+                                  ],
+                                  [r"env", r"idea", r"MACOSX", r"git", r"pdf$", r"events.json",
+                                   r"contacts.json", r"pycache", r"tests", r"UI", r"main\.py", r"README\.md",
+                                   r"Calendar", r"Contact", r"Event\.py", r".*init__\.py"
                                    ])
     print(plagiarism_check.check_hash_str())
