@@ -24,7 +24,7 @@ class ImportCheck(object):
         # Get all the folders in the directory
         folders = [x[1] for x in os.walk(self.__check_directory)][0]
         no_import_list = []
-        import_regex = re.compile(r"^\s*import\s" + module + r"|^\s*from\s" + module + r"import")
+        import_regex = re.compile(r"^\s*import\s" + module + r"|^\s*from\s" + module + r"\simport")
 
         for folder in folders:
             for root, directories, files in os.walk(self.__check_directory + os.path.sep + folder):
