@@ -8,8 +8,8 @@ if __name__ == '__main__':
     # Check for plagiarism
     plagiarism_check = Plagiarism(
         "./submissions",
-        ["test_potion.py", ".DS_Store", "README.md", "README.pdf"],
-        [r".*.csv", r"images/.*", r"__pycache__.*", r"Data.*"]
+        ["test_potion.py", ".DS_Store", "README.md", "README.pdf", "ItemsClass.py"],
+        [r".*.csv", r"images/.*", r"__pycache__.*", r"Data.*", r"\.git.*"]
     )
     print(plagiarism_check.check_hash_str())
     # Find the submission .zip file and extract it
