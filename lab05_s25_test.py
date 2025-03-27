@@ -61,7 +61,7 @@ Location: The Labyrinth
 """
 
 
-def is_close_enough(a: str, b: str) -> bool:
+def is_close_enough(a: str, b: str) -> int:
     """
     Returns true if the strings are roughly similar.
     :param a: The first string to compare.
@@ -71,7 +71,7 @@ def is_close_enough(a: str, b: str) -> bool:
     return Levenshtein.distance(
         re.sub(r"\s\s+", " ", a.lower()),
         re.sub(r"\s\s+", " ", b.lower())
-    ) < 5
+    )
 
 
 def run_code(filename: str) -> str:
