@@ -31,3 +31,4 @@ if __name__ == '__main__':
     i_learn_zip.inject("./lab05_s25_test.py", "lab05_s25_test.py")
 
     runner = Run("./submissions")
+    runner.run("python3 lab05_s25_test.py")
