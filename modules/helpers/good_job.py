@@ -25,6 +25,7 @@ def good_job() -> str:
         "Well done!",
         "You did great!",
         "You did well.",
+        "You did well!",
         "You nailed it!",
         "You're doing a great job!",
         "You've outdone yourself!",
