@@ -1,3 +1,4 @@
+import re
 import subprocess
 import Levenshtein
 
@@ -67,7 +68,10 @@ def is_close_enough(a: str, b: str) -> bool:
     :param b: The second string to compare.
     :return: Boolean of string similarity.
     """
-    return Levenshtein.distance(a.lower(), b.lower()) < 5
+    return Levenshtein.distance(
+        re.sub(r"\s\s+", " ", a.lower()),
+        re.sub(r"\s\s+", " ", b.lower())
+    ) < 5
 
 
 def run_code(filename: str) -> str:
