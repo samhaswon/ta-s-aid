@@ -23,15 +23,15 @@ def checkout(repo, branch):
 
 
 def find_branch(branches, suffix):
-    matches = [b for b in branches if b.lower().endswith(suffix)]
+    matches = [b for b in branches if suffix.search(b)]
     return matches[0] if len(matches) == 1 else None
 
 
 def check_branches(repo):
     branches = run_git(repo, 'branch', '--format=%(refname:short)').splitlines()
-    bf = find_branch(branches, '-branch-for-merge')
-    pb = find_branch(branches, '-personal_branch')
-    tb = find_branch(branches, '-temp-branch')
+    bf = find_branch(branches, re.compile(r"^.+[-_]branch[-_]for[-_]merge$"))
+    pb = find_branch(branches, re.compile(r"^.+[-_]personal[-_]branch$"))
+    tb = find_branch(branches, re.compile(r"^.+[-_]temp[-_]branch$"))
     return {
         'count': len(branches),
         'main': 'main' in branches,
@@ -79,7 +79,7 @@ def check_instructions(repo, branches):
 
     # conflict resolution commit
     log = run_git(repo, 'log', '--oneline')
-    info['conflict_resolved'] = 'resolved conflict with Assignment.txt' in log
+    info['conflict_resolved'] = 'resolved conflict with Assignment' in log.lower()
 
     # merge into main
     checkout(repo, 'main')
