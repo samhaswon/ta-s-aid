@@ -57,19 +57,19 @@ def check_files(repo, branches):
     checkout(repo, branches['bf_name'])
     files = list_files(repo)
     results['bf_Assignment'] = 'assignment.txt' in files or 'assignment' in files
-    results['bf_Icarus'] = any(f.startswith('Icarus') for f in files)
+    results['bf_Icarus'] = any(f.startswith('icarus') for f in files)
 
     # personal_branch
     checkout(repo, branches['pb_name'])
     files = list_files(repo)
     results['pb_Assignment'] = 'assignment.txt' in files or 'assignment' in files
-    results['pb_Goblet'] = any(f.startswith('Goblet') for f in files)
+    results['pb_Goblet'] = any(f.startswith('goblet') for f in files)
 
     # main
     checkout(repo, 'main')
     files = list_files(repo)
-    results['main_Icarus'] = any(f.startswith('Icarus') for f in files)
-    results['main_noGoblet'] = not any(f.startswith('Goblet') for f in files)
+    results['main_Icarus'] = any(f.startswith('icarus') for f in files)
+    results['main_noGoblet'] = not any(f.startswith('goblet') for f in files)
 
     return results
 
