@@ -45,7 +45,7 @@ def check_branches(repo):
 
 def list_files(repo):
     return [
-        f for f in os.listdir(repo)
+        f.lower() for f in os.listdir(repo)
         if os.path.isfile(os.path.join(repo, f)) and f != '.gitignore'
     ]
 
@@ -56,13 +56,13 @@ def check_files(repo, branches):
     # branch-for-merge
     checkout(repo, branches['bf_name'])
     files = list_files(repo)
-    results['bf_Assignment'] = 'Assignment.txt' in files
+    results['bf_Assignment'] = 'assignment.txt' in files or 'assignment' in files
     results['bf_Icarus'] = any(f.startswith('Icarus') for f in files)
 
     # personal_branch
     checkout(repo, branches['pb_name'])
     files = list_files(repo)
-    results['pb_Assignment'] = 'Assignment.txt' in files
+    results['pb_Assignment'] = 'assignment.txt' in files or 'assignment' in files
     results['pb_Goblet'] = any(f.startswith('Goblet') for f in files)
 
     # main
