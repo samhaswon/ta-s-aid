@@ -23,7 +23,7 @@ def checkout(repo, branch):
 
 
 def find_branch(branches, suffix):
-    matches = [b for b in branches if b.endswith(suffix)]
+    matches = [b for b in branches if b.lower().replace('-', '').endswith(suffix)]
     return matches[0] if len(matches) == 1 else None
 
 
