@@ -14,4 +14,16 @@ if __name__ == '__main__':
 
     # Run all the tests
     runner = Run("./submissions")
+
+    # Fix the branch stuff from cloning
+    runner.run("git config remote.origin.fetch \"+refs/heads/*:refs/remotes/origin/*\"")
+    runner.run("git fetch origin")
+    runner.run(
+        "for b in $(git branch -r | "
+        "grep '^  origin/' | "
+        "grep -vE 'HEAD|main' | "
+        "sed 's|  origin/||'); do "
+        "git branch --track \"$b\" \"origin/$b\" 2>/dev/null; "
+        "done"
+    )
     runner.run("python3 lab07_s25_test.py")
