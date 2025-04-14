@@ -79,7 +79,7 @@ def check_instructions(repo, branches):
 
     # conflict resolution commit
     log = run_git(repo, 'log', '--oneline')
-    info['conflict_resolved'] = 'resolved conflict with Assignment' in log.lower()
+    info['conflict_resolved'] = 'resolved conflict with assignment' in log.lower()
 
     # merge into main
     checkout(repo, 'main')
