@@ -22,7 +22,7 @@ def checkout(repo, branch):
     )
 
 
-def find_branch(branches, suffix):
+def find_branch(branches, suffix: re.Pattern):
     matches = [b for b in branches if suffix.search(b)]
     return matches[0] if len(matches) == 1 else None
 
@@ -89,7 +89,7 @@ def check_instructions(repo, branches):
 
     # temp branch deletion
     br = run_git(repo, 'branch', '--format=%(refname:short)').splitlines()
-    info['temp_deleted'] = find_branch(br, '-temp-branch') is None
+    info['temp_deleted'] = find_branch(br, re.compile(r"^.+[-_]temp[-_]branch")) is None
 
     return info
 
