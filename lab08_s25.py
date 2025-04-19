@@ -22,7 +22,8 @@ if __name__ == '__main__':
             "README.md",
             "README.pdf",
             "ItemsClass.py",
-            "Items.py"
+            "Items.py",
+            "main.py",
         ],
         [
             r".*.csv",
@@ -34,12 +35,13 @@ if __name__ == '__main__':
         ]
     )
     print(plagiarism_check.check_hash_str())
+    runner = Run("./submissions")
 
     i_learn_zip = ILearnZip("", zip_expected=True)
+    runner.run("mkdir tests")
     i_learn_zip.inject("./test_student_manager.py", "tests/test_student_manager.py")
     i_learn_zip.inject("./test_student.py", "tests/test_student.py")
 
     # Run the tests
-    runner = Run("./submissions")
     runner.run("echo \"Student tests\"; python3 -m unittest discover tests; "
                "echo \"Our tests\"; python3 -m unittest discover .")
