@@ -25,7 +25,7 @@ Entity: Medusa
     residence: Cisthene
     mother: Phorcys
     father: Ceto
-    domain: Once a beautiful maiden, Medusa is now depicted with a hideous visage, featuring writhing snakes instead of hair and eyes that turn onlookers to stone
+    domain:
     roman_name:
     symbol:
     legacy:
@@ -69,8 +69,8 @@ def is_close_enough(a: str, b: str) -> int:
     :return: Boolean of string similarity.
     """
     return Levenshtein.distance(
-        re.sub(r"\s\s+", " ", a.lower()),
-        re.sub(r"\s\s+", " ", b.lower())
+        re.sub(r"\s\s+|\[]", " ", a.lower()),
+        re.sub(r"\s\s+|\[]", " ", b.lower())
     )
 
 
